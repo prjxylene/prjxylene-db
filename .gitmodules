@@ -1,0 +1,18 @@
+[submodule "artix"]
+	path = artix
+	url = https://github.com/prjxylene/prjxylene-db-artix
+[submodule "kintex"]
+	path = kintex
+	url = https://github.com/prjxylene/prjxylene-db-kintex
+[submodule "spartan"]
+	path = spartan
+	url = https://github.com/prjxylene/prjxylene-db-spartan
+[submodule "virtex"]
+	path = virtex
+	url = https://github.com/prjxylene/prjxylene-db-virtex
+[submodule "zynq"]
+	path = zynq
+	url = https://github.com/prjxylene/prjxylene-db-zynq
+[submodule "versal"]
+	path = versal
+	url = https://github.com/prjxylene/prjxylene-db-versal
