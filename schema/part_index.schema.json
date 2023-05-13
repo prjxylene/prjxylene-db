@@ -1,0 +1,358 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/prjxylene/prjxylene-db/main/schema/part_index.schema.json",
+	"title": "prjxylene Part Index",
+	"description": "Describes the layout of the prjxylene part_index.xcm payload files",
+	"type": "object",
+	"properties": {
+		"version": {
+			"type": "string",
+			"description": "The Vivado version the part index was generated in conjunction with."
+		},
+		"generated": {
+			"type": "string",
+			"description": "The UTC timestamp the file was generated at."
+		},
+		"devices": {
+			"type": "array",
+			"description": "The collection of devices in this family.",
+			"items": { "$ref": "#/$defs/device" }
+		}
+	},
+	"required": [
+		"version",
+		"generated",
+		"devices"
+	],
+	"$defs": {
+		"device": {
+			"type": "object",
+			"description": "The description of the device.",
+			"properties": {
+				"family": {
+					"type": "string",
+					"description": "The normalized name for the FPGA family."
+				},
+				"c_family": {
+					"type": "string",
+					"description": "The non-normalized device family name."
+				},
+				"device": {
+					"type": "string",
+					"description": "The part number / device name."
+				},
+				"arch": {
+					"type": "object",
+					"description": "The name of the device architecture.",
+					"properties": {
+						"full_name": {
+							"type": "string",
+							"description": "The full normalized name"
+						},
+						"short_name": {
+							"type": "string",
+							"description": "The compact, non-normalized name."
+						}
+					},
+					"required": [
+						"full_name",
+						"short_name"
+					]
+				},
+				"config_modes": {
+					"type": "string"
+				},
+				"packages": {
+					"type": "object",
+					"description": "The collection of packages and their metadata for this device.",
+					"items": { "$ref": "#/$defs/package" }
+				}
+			},
+			"required": [
+				"family",
+				"c_family",
+				"device",
+				"arch",
+				"config_modes",
+				"packages"
+			]
+
+		},
+		"package": {
+			"type": "object",
+			"description": "The description of a package for a given device.",
+			"properties": {
+				"speeds": {
+					"type": "object",
+					"description": "Describes a speed grade for a device package.",
+					"$ref": "#/$defs/speed"
+				},
+				"geometry": {
+					"type": "object",
+					"description": "The device geometry within the package.",
+					"$ref": "#/$defs/geometry"
+				},
+				"compatible": {
+					"type": "array",
+					"description": "The list of drop-in compatible devices.",
+					"items": { "type": "string" }
+				},
+				"idcode": {
+					"type": "object",
+					"description": "The JTAG ID for the device",
+					"properties": {
+						"extended": {
+							"type": "string"
+						},
+						"normal": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"extended",
+						"normal"
+					]
+				},
+				"transceivers": {
+					"type": "object",
+					"description": "The number of each type of transceivers on the packaged device.",
+					"$ref": "#/$defs/transceivers"
+				},
+				"io": {
+					"type": "object",
+					"description": "The number of I/Os on the packaged device and supported voltage standards.",
+					"properties": {
+						"pins": {
+							"type": "number",
+							"description": "The number of pins on the packaged device."
+						},
+						"standards": {
+							"type": "array",
+							"description": "The list of supported I/O standards",
+							"items": { "type": "string" }
+						}
+					},
+					"required": [
+						"pins",
+						"standards"
+					]
+				},
+				"temp": {
+					"type": "object",
+					"description": "The temp classifications for the device package speed-grades.",
+					"$ref": "#/$defs/temp"
+				},
+				"buses": {
+					"type": "object"
+				}
+			},
+			"required": [
+				"speeds",
+				"geometry",
+				"compatible",
+				"idcode",
+				"transceivers",
+				"io",
+				"temp",
+				"buses"
+			]
+		},
+		"speed": {
+			"type": "object",
+			"description": "Describes a speed grade for a device package.",
+			"properties": {
+				"subclass": {
+					"type": "string",
+					"description": "The package subclass."
+				},
+				"label": {
+					"type": "string",
+					"description": "The label for the package"
+				},
+				"level": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"date": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"id",
+						"date"
+					]
+				},
+				"suffix": {
+					"type": "string"
+				},
+				"voltage": {
+					"type": "object",
+					"properties": {
+						"max": {
+							"type": "number"
+						},
+						"min": {
+							"type": "number"
+						},
+						"ref": {
+							"type": "number"
+						}
+					},
+					"required": [
+						"max",
+						"min",
+						"ref"
+					]
+				}
+			},
+			"required": [
+				"subclass",
+				"label",
+				"level",
+				"suffix",
+				"voltage"
+			]
+		},
+		"geometry": {
+			"type": "object",
+			"description": "The device geometry within the package.",
+			"properties": {
+				"cols": {
+					"type": "number",
+					"description": "The number of columns the packaged device is divided into."
+				},
+				"rows": {
+					"type": "number",
+					"description": "The number of rows the packaged device is divided into."
+				},
+				"block_ram": {
+					"type": "number",
+					"description": "The number of block rams in the packaged device."
+				},
+				"ultra_ram": {
+					"type": "number",
+					"description": "The number of UltraScale UltraRAM blocks in the packaged device."
+				},
+				"dsp": {
+					"type": "number",
+					"description": "The number of DSP blocks in the packaged device."
+				},
+				"ff": {
+					"type": "number",
+					"description": "The number of Flip-Flops in the packaged device."
+				},
+				"lut": {
+					"type": "number",
+					"description": "The number of LUTs in the packaged device."
+				},
+				"slices": {
+					"type": "number",
+					"description": "The number of logic slices in the packaged device."
+				},
+				"slrs": {
+					"type": "number",
+					"description": "The number of super-logic regions in the packaged device."
+				},
+				"mcbs": {
+					"type": "string"
+				},
+				"mmcm": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"cols",
+				"rows",
+				"block_ram",
+				"ultra_ram",
+				"dsp",
+				"ff",
+				"lut",
+				"slices",
+				"slrs",
+				"mcbs",
+				"mmcm"
+			]
+		},
+		"transceivers": {
+			"type": "object",
+			"properties": {
+				"GB": {
+					"type": "number"
+				},
+				"GTHE2": {
+					"type": "number"
+				},
+				"GTHE3": {
+					"type": "number"
+				},
+				"GTHE4": {
+					"type": "number"
+				},
+				"GTM": {
+					"type": "number"
+				},
+				"GTME5": {
+					"type": "number"
+				},
+				"GTPE2": {
+					"type": "number"
+				},
+				"GTXE2": {
+					"type": "number"
+				},
+				"GTYE3": {
+					"type": "number"
+				},
+				"GTYE4": {
+					"type": "number"
+				},
+				"GTYE5": {
+					"type": "number"
+				},
+				"GTYP": {
+					"type": "number"
+				},
+				"GTZE2": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"GB",
+				"GTHE2",
+				"GTHE3",
+				"GTHE4",
+				"GTM",
+				"GTME5",
+				"GTPE2",
+				"GTXE2",
+				"GTYE3",
+				"GTYE4",
+				"GTYE5",
+				"GTYP",
+				"GTZE2"
+			]
+		},
+		"temp": {
+			"type": "object",
+			"properties": {
+				"grade": {
+					"type": "string"
+				},
+				"ref": {
+					"type": "number"
+				},
+				"max": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"grade",
+				"ref",
+				"max"
+			]
+		}
+	}
+}
